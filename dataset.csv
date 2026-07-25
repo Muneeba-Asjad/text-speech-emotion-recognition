@@ -1,0 +1,40 @@
+text,sentiment
+"I am so happy and excited today!",happiness
+"I feel extremely sad and depressed about this.",sadness
+"I am so angry and furious right now!",anger
+"I hate when people disrespect others.",hate
+"I love spending time with my family and friends.",love
+"I am very worried about my exam results.",worry
+"What a wonderful surprise, I did not expect this!",surprise
+"This lecture is so boring and dull.",boredom
+"I am feeling so enthusiastic about starting this new project!",enthusiasm
+"This joke is hilarious, we are having so much fun!",fun
+"Finally, the exams are over and I feel so relieved.",relief
+"I feel so empty and numb inside.",empty
+"Everything is normal and okay today.",neutral
+"I am delighted to meet you!",happiness
+"Tears are falling from my eyes, I am so heartbroken.",sadness
+"Get out of my sight right now, I am mad!",anger
+"I despise dishonest people.",hate
+"You mean the world to me, I adore you.",love
+"I am anxious about my health condition.",worry
+"Oh my god, I cannot believe this happened!",surprise
+"I have nothing to do, feeling so bored.",boredom
+"I cannot wait to start this exciting journey!",enthusiasm
+"Party with friends is always awesome and joyful!",fun
+"A big weight has been lifted off my chest, thank goodness.",relief
+"I feel blank and disconnected from the world.",empty
+"The weather is fine and the day is passing quietly.",neutral
+"Success brings immense satisfaction and joy.",happiness
+"Losing a friend is the most painful feeling.",sadness
+"Shut up, you are annoying me so much!",anger
+"I abhor discrimination in any form.",hate
+"Sending you warm hugs and lots of love.",love
+"What if things go wrong during the interview?",worry
+"It is totally unexpected, wow!",surprise
+"Sitting alone doing nothing is tiring.",boredom
+"Let us do this with full energy and passion!",enthusiasm
+"We danced and enjoyed the festival so much!",fun
+"The stress is gone now, I can sleep peacefully.",relief
+"My mind is completely empty right now.",empty
+"I am just sitting here reading a regular book.",neutral
