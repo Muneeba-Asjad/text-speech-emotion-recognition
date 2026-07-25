@@ -9,12 +9,13 @@ import seaborn as sns
 import streamlit as st
 import speech_recognition as sr
 from streamlit_mic_recorder import mic_recorder
+from pydub import AudioSegment
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, precision_recall_fscore_support
 
-# NLTK data download
+# Download required NLTK data
 nltk.download('stopwords', quiet=True)
 nltk.download('punkt', quiet=True)
 from nltk.corpus import stopwords
@@ -42,7 +43,7 @@ KEYWORD_MAP = {
 }
 
 # ---------------------------------------------------------
-# 2. PREPROCESSING & AUDIO PROCESSING
+# 2. PREPROCESSING & AUDIO CONVERSION
 # ---------------------------------------------------------
 def preprocess_text(text):
     if not isinstance(text, str):
@@ -55,11 +56,17 @@ def preprocess_text(text):
     tokens = [word for word in tokens if word not in stop_words]
     return " ".join(tokens)
 
+# Convert WebM/Ogg Audio Bytes to WAV format
 def transcribe_audio_bytes(audio_bytes):
     recognizer = sr.Recognizer()
     try:
-        audio_file = io.BytesIO(audio_bytes)
-        with sr.AudioFile(audio_file) as source:
+        # Convert raw audio bytes into AudioSegment and export to PCM WAV
+        audio_segment = AudioSegment.from_file(io.BytesIO(audio_bytes))
+        wav_io = io.BytesIO()
+        audio_segment.export(wav_io, format="wav")
+        wav_io.seek(0)
+
+        with sr.AudioFile(wav_io) as source:
             audio_data = recognizer.record(source)
             text = recognizer.recognize_google(audio_data)
             return text
@@ -84,7 +91,6 @@ def main():
     df = None
     st.sidebar.header("📊 Dataset Options")
 
-    # Load dataset automatically or manually
     if os.path.exists(default_dataset_path):
         try:
             df = pd.read_csv(default_dataset_path)
@@ -121,10 +127,8 @@ def main():
 
         st.sidebar.metric(label="Model Accuracy", value=f"{acc*100:.2f}%")
 
-        # UI Tabs
         tab1, tab2, tab3 = st.tabs(["🎯 Emotion Detection", "📈 Model Evaluation", "📋 Confusion Matrix"])
 
-        # TAB 1: Detection
         with tab1:
             st.subheader("Choose Input Method:")
             input_mode = st.radio("Input Source", ["Text Input", "Voice Input (Microphone)"], horizontal=True)
@@ -158,7 +162,6 @@ def main():
                     detected_emotion = None
                     confidence = 95.00
 
-                    # 1. Keyword check for accuracy
                     words_in_input = user_text.lower().split()
                     for word in words_in_input:
                         clean_w = re.sub(r'[^a-zA-Z]', '', word)
@@ -166,7 +169,6 @@ def main():
                             detected_emotion = KEYWORD_MAP[clean_w]
                             break
 
-                    # 2. Machine Learning Model check
                     if not detected_emotion:
                         input_vec = vectorizer.transform([cleaned_input])
                         detected_emotion = model.predict(input_vec)[0]
@@ -185,7 +187,6 @@ def main():
                 else:
                     st.warning("Please provide text or record voice audio.")
 
-        # TAB 2: Metrics
         with tab2:
             st.subheader("Model Performance Metrics (30% Test Data)")
             col_a, col_b, col_c, col_d = st.columns(4)
@@ -198,7 +199,6 @@ def main():
             report_dict = classification_report(y_test, y_pred, output_dict=True, zero_division=0)
             st.dataframe(pd.DataFrame(report_dict).transpose())
 
-        # TAB 3: Matrix
         with tab3:
             st.subheader("Confusion Matrix")
             cm = confusion_matrix(y_test, y_pred)

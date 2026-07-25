@@ -7,3 +7,4 @@ SpeechRecognition
 matplotlib
 seaborn
 streamlit-mic-recorder
+pydub
